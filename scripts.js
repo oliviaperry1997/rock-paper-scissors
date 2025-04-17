@@ -33,9 +33,9 @@ const humanSelection = getHumanChoice();
 
 //create function to play round
 function playRound(computerChoice, humanChoice) {
-    //run getComputerChoice to get its return value
+    //pass computerSelection to computerChoice for setting parameter
     computerChoice = computerSelection;
-    //run getHumanChoice to get its return value
+    //pass humanSelection to humanChoice for setting parameter
     humanChoice = humanSelection;
     //compare computerChoice with humanChoice to see if human wins
     if ((computerChoice === 'rock' && humanChoice === 'paper') ||
@@ -65,3 +65,11 @@ function playRound(computerChoice, humanChoice) {
 
 //run playRound function with acquired parameters
 playRound(computerSelection, humanSelection);
+
+//create function playGame that will run playRound 5 times then compare score and declare a winner
+    //declare variable roundNumber that keeps track of how many rounds have been played
+    //if roundNumber is less than 5, run playRound and increment roundNumber
+    //else, compare score
+        //if human score is higher, log a message saying the user won
+        //else if computer score is higher, log a message saying the user lost
+        //else log a message saying its a tie
