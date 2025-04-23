@@ -18,22 +18,49 @@ function getComputerChoice() {
     }
 }
 
-//create function getHumanChoice
-function getHumanChoice() {
-    //prompt user requesting what their choice is and store it in humanChoice
-    let humanVar = prompt('rock, paper, scissors!');
-    //convert humanVar to lowercase
-    humanVar = humanVar.toLowerCase();
-    return humanVar;
+//set variables for html elements
+const rock = document.querySelector('#rock');
+const paper = document.querySelector('#paper');
+const scissors = document.querySelector('#scissors');
+const buttons = document.querySelector('#buttons');
+const output = document.querySelector('#output');
+const scoreboard = document.querySelector('#scoreboard');
+const clearLog = document.querySelector('#clearLog');
+
+//function to use event listener
+function getHumanChoice(event) {
+    let humanVar = '';
+    
+    switch(event.target.id) {
+        case 'rock':
+            humanVar = 'rock';
+            break;
+        case 'paper':
+            humanVar = 'paper';
+            break;
+        case 'scissors':
+            humanVar = 'scissors';
+            break;
+    }
+    playRound(getComputerChoice(), humanVar);
 }
+
+//event listener for buttons
+buttons.addEventListener('click', (getHumanChoice));
+
+scoreboard.textContent = `Score: ${humanScore} - ${computerScore}`;
 
 //create functions for incrementing score
 function incrementHumanScore() {
     humanScore++;
+    scoreboard.textContent = `Score: ${humanScore} - ${computerScore}`;
 }
 function incrementComputerScore() {
     computerScore++;
-}
+    scoreboard.textContent = `Score: ${humanScore} - ${computerScore}`;
+};
+
+//function for adding result to log
 
 //create function to play round
 function playRound(computerChoice, humanChoice) {
@@ -42,7 +69,7 @@ function playRound(computerChoice, humanChoice) {
     (computerChoice === 'paper' && humanChoice === 'scissors') ||
     (computerChoice === 'scissors' && humanChoice === 'rock')) {
         //if human wins, display victory message
-        console.log(`You win: ${humanChoice} beats ${computerChoice}!`);
+        logResult(`You win: ${humanChoice} beats ${computerChoice}!`);
         //increment humanScore
         incrementHumanScore();
     //compare computerChoice with humanChoice to see if computer wins
@@ -50,39 +77,38 @@ function playRound(computerChoice, humanChoice) {
     (computerChoice === 'paper' && humanChoice === 'rock') ||
     (computerChoice === 'scissors' && humanChoice === 'paper')) {
         //if computer wins, display defeat message
-        console.log(`You lose: ${computerChoice} beats ${humanChoice}.`);
+        logResult(`You lose: ${computerChoice} beats ${humanChoice}.`);
         //increment computerScore
         incrementComputerScore();
         //compare computerChoice with humanChoice to see if they are the same
     } else if (computerChoice === humanChoice) {
         //if it's tie, no one's score gets incremented; display tie message
-        console.log(`It's a tie! You both chose ${computerChoice}.`);
+        logResult(`It's a tie! You both chose ${computerChoice}.`);
         //if none of the above were true, then something went wrong - display error message
-    } else {
-        console.log('Something went wrong.')
+    } else {logResult('Something went wrong.');}
+    if (humanScore === 5) {
+        logResult(`Game Over: You win! The final score was ${humanScore} - ${computerScore}.`)
+        humanScore = 0;
+        computerScore = 0;
+        scoreboard.textContent = `Score: ${humanScore} - ${computerScore}`;
+    }
+    if (computerScore === 5) {
+        logResult(`Game Over: You lose! The final score was ${humanScore} - ${computerScore}.`)
+        humanScore = 0;
+        computerScore = 0;
+        scoreboard.textContent = `Score: ${humanScore} - ${computerScore}`;
     }
 }
 
-//create function playGame that will run playRound 5 times then compare score and declare a winner
-function playGame() {
-    playRound(getComputerChoice(), getHumanChoice());
-    playRound(getComputerChoice(), getHumanChoice());
-    playRound(getComputerChoice(), getHumanChoice());
-    playRound(getComputerChoice(), getHumanChoice());
-    playRound(getComputerChoice(), getHumanChoice());
-    //if human score is higher, log a message saying the user won
-    if (humanScore > computerScore) {
-        console.log(`You win! You beat the computer ${humanScore} to ${computerScore}.`);
-    //else if computer score is higher, log a message saying the user lost
-    } else if (humanScore < computerScore) {
-        console.log(`You lose! The computer scored ${computerScore} points, and you only scored ${humanScore}.`);
-    //else log a message saying its a tie
-    } else if (humanScore === computerScore) {
-        console.log(`It's a tie! You both scored ${humanScore} points.`);
-    } else {
-        console.log('Something went wrong.');
-    }
+function logResult(result) {
+    const li = document.createElement('li');
+    li.textContent = result;
+    output.appendChild(li);
 }
 
-//run playGame!
-playGame();
+clearLog.addEventListener("click", () => {
+    output.replaceChildren();
+    humanScore = 0;
+    computerScore = 0;
+    scoreboard.textContent = `Score: ${humanScore} - ${computerScore}`;
+});
